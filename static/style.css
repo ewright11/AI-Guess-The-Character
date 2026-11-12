@@ -346,3 +346,26 @@ button:disabled {
     }
 }
 
+.board-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 12px 25px;
+    margin-bottom: 8px;
+
+    background: #08447d;
+    border: 3px solid #2475b8;
+    border-radius: 12px;
+
+    color: #ffda58;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+@media (max-width: 650px) {
+    .board-heading {
+        font-size: 11px;
+        padding: 10px;
+    }
+}
