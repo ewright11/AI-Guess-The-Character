@@ -1,22 +1,9 @@
+
 [
-  {
-    "id": 1,
-    "name": "Alex",
-    "image": "images/alex.png",
-    "attributes": {
-      "hair": "black",
-      "glasses": true,
-      "hat": false
-    }
-  },
-  {
-    "id": 2,
-    "name": "Jordan",
-    "image": "images/jordan.png",
-    "attributes": {
-      "hair": "brown",
-      "glasses": false,
-      "hat": true
-    }
-  }
+  {"id":1,"name":"Alex","avatar":"👨🏻","hair":"black","glasses":false,"hat":false,"beard":false},
+  {"id":2,"name":"Jordan","avatar":"👩🏽","hair":"brown","glasses":false,"hat":false,"beard":false},
+  {"id":3,"name":"Sam","avatar":"👨🏼‍🦰","hair":"red","glasses":false,"hat":false,"beard":false},
+  {"id":4,"name":"Taylor","avatar":"👩🏼‍🦱","hair":"blonde","glasses":false,"hat":false,"beard":false},
+  {"id":5,"name":"Morgan","avatar":"👨🏾‍🦱","hair":"black","glasses":false,"hat":false,"beard":true},
+  {"id":6,"name":"Casey","avatar":"👩🏻‍🦰","hair":"red","glasses":false,"hat":false,"beard":false}
 ]
