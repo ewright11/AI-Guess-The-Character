@@ -1,10 +1,63 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
     <title>AI Guess Who</title>
+    <link rel="stylesheet"
+          href="/static/style.css">
 </head>
 <body>
-    <h1>AI Guess Who</h1>
-    <p>Welcome to the game!</p>
+    <header>
+        <h1>AI Guess Who</h1>
+        <p>Practice Mode</p>
+    </header>
+
+    <main>
+        <section class="game-panel">
+            <h2>Ask a Question</h2>
+
+            <div class="question-controls">
+                <select id="attribute">
+                    <option value="glasses">Glasses</option>
+                    <option value="hat">Hat</option>
+                    <option value="beard">Beard</option>
+                    <option value="hair">Hair Color</option>
+                </select>
+
+                <select id="value"></select>
+
+                <button id="ask-button">
+                    Ask Question
+                </button>
+            </div>
+
+            <p id="answer">Ask a question to begin!</p>
+
+            <div class="stats">
+                <span>
+                    Questions: <b id="question-count">0</b>
+                </span>
+                <span>
+                    Remaining: <b id="remaining-count">20</b>
+                </span>
+            </div>
+
+            <button id="restart-button">
+                New Game
+            </button>
+        </section>
+
+        <section>
+            <h2>Character Board</h2>
+            <p>Click a character to select your final guess.</p>
+
+            <div id="character-board"></div>
+        </section>
+    </main>
+
+    <script src="/static/script.js"></script>
 </body>
 </html>
