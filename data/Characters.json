@@ -1,9 +1,22 @@
-
 [
   {"id":1,"name":"Alex","avatar":"👨🏻","hair":"black","glasses":false,"hat":false,"beard":false},
   {"id":2,"name":"Jordan","avatar":"👩🏽","hair":"brown","glasses":false,"hat":false,"beard":false},
   {"id":3,"name":"Sam","avatar":"👨🏼‍🦰","hair":"red","glasses":false,"hat":false,"beard":false},
   {"id":4,"name":"Taylor","avatar":"👩🏼‍🦱","hair":"blonde","glasses":false,"hat":false,"beard":false},
   {"id":5,"name":"Morgan","avatar":"👨🏾‍🦱","hair":"black","glasses":false,"hat":false,"beard":true},
-  {"id":6,"name":"Casey","avatar":"👩🏻‍🦰","hair":"red","glasses":false,"hat":false,"beard":false}
+  {"id":6,"name":"Casey","avatar":"👩🏻‍🦰","hair":"red","glasses":false,"hat":false,"beard":false},
+  {"id":7,"name":"Riley","avatar":"👨🏽","hair":"brown","glasses":false,"hat":false,"beard":true},
+  {"id":8,"name":"Jamie","avatar":"👩🏼","hair":"blonde","glasses":false,"hat":false,"beard":false},
+  {"id":9,"name":"Drew","avatar":"👨🏻‍🦱","hair":"black","glasses":false,"hat":false,"beard":false},
+  {"id":10,"name":"Avery","avatar":"👩🏾","hair":"brown","glasses":false,"hat":false,"beard":false},
+  {"id":11,"name":"Blake","avatar":"👨🏼","hair":"blonde","glasses":true,"hat":false,"beard":false},
+  {"id":12,"name":"Quinn","avatar":"👩🏻","hair":"black","glasses":true,"hat":false,"beard":false},
+  {"id":13,"name":"Cameron","avatar":"👨🏽‍🦰","hair":"red","glasses":true,"hat":false,"beard":true},
+  {"id":14,"name":"Parker","avatar":"👩🏽‍🦱","hair":"brown","glasses":true,"hat":false,"beard":false},
+  {"id":15,"name":"Reese","avatar":"👨🏾","hair":"black","glasses":true,"hat":false,"beard":true},
+  {"id":16,"name":"Skyler","avatar":"👩🏼‍🦰","hair":"red","glasses":true,"hat":false,"beard":false},
+  {"id":17,"name":"Charlie","avatar":"👨🏼‍🦱","hair":"blonde","glasses":false,"hat":true,"beard":false},
+  {"id":18,"name":"Robin","avatar":"👩🏻‍🦱","hair":"black","glasses":false,"hat":true,"beard":false},
+  {"id":19,"name":"Dakota","avatar":"👨🏽","hair":"brown","glasses":false,"hat":true,"beard":true},
+  {"id":20,"name":"Finley","avatar":"👩🏾‍🦰","hair":"red","glasses":false,"hat":true,"beard":false}
 ]
