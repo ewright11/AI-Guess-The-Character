@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,67 +7,116 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
     <title>AI Guess Who</title>
-    <link rel="stylesheet"
-          href="/static/style.css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <header>
-        <h1>AI Guess Who</h1>
-        <p>Practice Mode</p>
-    </header>
 
-    <main>
-        <section class="game-panel">
+<header class="top-bar">
+    <div class="logo">
+        <h1>GUESS WHO?</h1>
+        <p>AI EDITION · PRACTICE MODE</p>
+    </div>
+
+    <button id="restart-button" class="restart-btn">
+        ↻ New Game
+    </button>
+</header>
+
+<main>
+    <!-- GAME BOARD -->
+    <section class="board-section">
+        <div class="board-heading">
+            <h2>Your Board</h2>
+            <span id="board-status">20 / 20 Remaining</span>
+        </div>
+
+        <div class="progress-track">
+            <div id="progress-fill"></div>
+        </div>
+
+        <div id="character-board"></div>
+
+        <p class="board-instructions">
+            Ask questions to eliminate characters.
+            Click a remaining character to make your final guess.
+        </p>
+    </section>
+
+    <!-- GAME CONTROLS -->
+    <section class="game-panel">
+        <div class="panel-heading">
             <h2>Ask a Question</h2>
+            <span id="turn-label">Question 1</span>
+        </div>
 
-            <div class="question-controls">
-                <select id="attribute">
-                    <option value="glasses">Glasses</option>
-                    <option value="hat">Hat</option>
-                    <option value="beard">Beard</option>
-                    <option value="hair">Hair Color</option>
-                </select>
+        <div class="question-controls">
+            <select id="attribute">
+                <option value="glasses">Glasses</option>
+                <option value="hat">Hat</option>
+                <option value="beard">Beard</option>
+                <option value="hair">Hair Color</option>
+            </select>
 
-                <select id="value"></select>
+            <select id="value"></select>
 
-                <button id="ask-button">
-                    Ask Question
-                </button>
-            </div>
+            <button id="ask-button">Ask Question</button>
+        </div>
 
+        <!-- ANSWER DISPLAY -->
+        <div class="answer-panel">
             <p id="answer">Ask a question to begin!</p>
 
-            <div class="stats">
-                <span>
-                    Questions: <b id="question-count">0</b>
-                </span>
-                <span>
-                    Remaining: <b id="remaining-count">20</b>
-                </span>
+            <div class="answer-indicators">
+                <div id="yes-indicator" class="indicator">
+                    ✓ YES
+                </div>
+
+                <div id="no-indicator" class="indicator">
+                    ✕ NO
+                </div>
+            </div>
+        </div>
+
+        <!-- GAME STATISTICS -->
+        <div class="stats">
+            <div>
+                <span>Questions Asked</span>
+                <strong id="question-count">0</strong>
             </div>
 
-            <button id="restart-button">
-                New Game
-            </button>
-        </section>
-
-        <section class="board-section">
-            <h2>Player Board</h2>
-
-            <div class="board-heading">
-                <span>YOUR BOARD</span>
-                <span>GUESS WHO?</span>
+            <div>
+                <span>Characters Remaining</span>
+                <strong id="remaining-count">20</strong>
             </div>
+        </div>
 
-            <div id="character-board"></div>
+        <!-- QUESTION HISTORY -->
+        <div class="history-panel">
+            <h3>Question History</h3>
+            <div id="question-history">
+                <p class="empty-history">
+                    No questions asked yet.
+                </p>
+            </div>
+        </div>
+    </section>
+</main>
 
-            <p>
-                Ask questions to eliminate characters.
-                Click a remaining character to make your final guess.
-            </p>
-        </section>
-    </main>
+<!-- GAME RESULT POPUP -->
+<div id="result-modal" class="modal hidden"
+     role="dialog" aria-modal="true"
+     aria-labelledby="result-title">
+    <div class="modal-content">
+        <div id="result-icon" class="result-icon">🏆</div>
+        <h2 id="result-title">You Win!</h2>
+        <p id="result-message"></p>
 
-    <script src="/static/script.js"></script>
+        <button id="play-again-button">
+            Play Again
+        </button>
+    </div>
+</div>
+
+<script src="/static/script.js"></script>
 </body>
 </html>

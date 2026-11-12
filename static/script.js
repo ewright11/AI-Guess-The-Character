@@ -2,6 +2,7 @@
 let characters = [];
 let remaining = [];
 let gameOver = false;
+let questionHistory = [];
 
 const board = document.getElementById("character-board");
 const attributeSelect = document.getElementById("attribute");
@@ -10,18 +11,9 @@ const answerText = document.getElementById("answer");
 const askButton = document.getElementById("ask-button");
 
 const options = {
-    glasses: [
-        ["true", "Yes"],
-        ["false", "No"]
-    ],
-    hat: [
-        ["true", "Yes"],
-        ["false", "No"]
-    ],
-    beard: [
-        ["true", "Yes"],
-        ["false", "No"]
-    ],
+    glasses: [["true", "Yes"], ["false", "No"]],
+    hat: [["true", "Yes"], ["false", "No"]],
+    beard: [["true", "Yes"], ["false", "No"]],
     hair: [
         ["black", "Black"],
         ["brown", "Brown"],
@@ -42,11 +34,33 @@ function updateOptions() {
     });
 }
 
+function updateStats(questionCount) {
+    document.getElementById("question-count").textContent =
+        questionCount;
+
+    document.getElementById("remaining-count").textContent =
+        remaining.length;
+
+    document.getElementById("turn-label").textContent =
+        `Question ${questionCount + 1}`;
+
+    document.getElementById("board-status").textContent =
+        `${remaining.length} / ${characters.length} Remaining`;
+
+    const percentage = characters.length
+        ? (remaining.length / characters.length) * 100
+        : 0;
+
+    document.getElementById("progress-fill").style.width =
+        `${percentage}%`;
+}
+
 function renderBoard() {
     board.innerHTML = "";
 
     characters.forEach(character => {
-        const card = document.createElement("div");
+        const card = document.createElement("button");
+        card.type = "button";
         card.className = "character";
 
         if (!remaining.includes(character.id)) {
@@ -62,6 +76,7 @@ function renderBoard() {
 
         const traits = document.createElement("div");
         traits.className = "traits";
+
         traits.textContent =
             `Hair: ${character.hair} | ` +
             `Glasses: ${character.glasses ? "Yes" : "No"} | ` +
@@ -72,7 +87,16 @@ function renderBoard() {
         card.appendChild(name);
         card.appendChild(traits);
 
-        if (!gameOver && remaining.includes(character.id)) {
+        const available = !gameOver &&
+            remaining.includes(character.id);
+
+        card.disabled = !available;
+        card.setAttribute(
+            "aria-label",
+            `Guess ${character.name}`
+        );
+
+        if (available) {
             card.addEventListener("click", () => {
                 guessCharacter(character.id, character.name);
             });
@@ -80,29 +104,93 @@ function renderBoard() {
 
         board.appendChild(card);
     });
+}
 
-    document.getElementById("remaining-count").textContent =
-        remaining.length;
+function showAnswer(answer) {
+    document.getElementById("yes-indicator")
+        .classList.toggle("active", answer === true);
+
+    document.getElementById("no-indicator")
+        .classList.toggle("active", answer === false);
+}
+
+function renderHistory() {
+    const container =
+        document.getElementById("question-history");
+
+    container.innerHTML = "";
+
+    if (questionHistory.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "empty-history";
+        empty.textContent = "No questions asked yet.";
+        container.appendChild(empty);
+        return;
+    }
+
+    [...questionHistory].reverse().forEach(entry => {
+        const row = document.createElement("div");
+        row.className = "history-entry";
+
+        const question = document.createElement("span");
+        question.textContent = entry.question;
+
+        const answer = document.createElement("span");
+        answer.className =
+            `history-answer ${entry.answer ? "yes" : "no"}`;
+        answer.textContent = entry.answer ? "YES" : "NO";
+
+        row.appendChild(question);
+        row.appendChild(answer);
+        container.appendChild(row);
+    });
+}
+
+function getQuestionText(attribute, value) {
+    if (attribute === "hair") {
+        return `Does your character have ${value} hair?`;
+    }
+
+    if (attribute === "glasses") {
+        return value
+            ? "Does your character wear glasses?"
+            : "Does your character not wear glasses?";
+    }
+
+    if (attribute === "hat") {
+        return value
+            ? "Does your character wear a hat?"
+            : "Does your character not wear a hat?";
+    }
+
+    return value
+        ? "Does your character have a beard?"
+        : "Does your character not have a beard?";
 }
 
 async function loadGame() {
-    const charactersResponse = await fetch("/api/characters");
-    characters = await charactersResponse.json();
+    const characterResponse = await fetch("/api/characters");
+    if (!characterResponse.ok) {
+        throw new Error("Could not load characters.");
+    }
+
+    characters = await characterResponse.json();
 
     const stateResponse = await fetch("/api/state");
+    if (!stateResponse.ok) {
+        throw new Error("Could not load game state.");
+    }
+
     const state = await stateResponse.json();
 
     remaining = state.remaining;
     gameOver = state.game_over;
 
-    document.getElementById("question-count").textContent =
-        state.questions_asked;
-
     askButton.disabled = gameOver;
-    answerText.textContent = gameOver
-        ? "Game finished. Start a new game."
-        : "Ask a question to begin!";
+    attributeSelect.disabled = gameOver;
+    valueSelect.disabled = gameOver;
 
+    updateStats(state.questions_asked);
     renderBoard();
 }
 
@@ -116,28 +204,43 @@ async function askQuestion() {
         value = value === "true";
     }
 
-    const response = await fetch("/api/question", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({attribute, value})
-    });
+    askButton.disabled = true;
 
-    const result = await response.json();
+    try {
+        const response = await fetch("/api/question", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({attribute, value})
+        });
 
-    if (!response.ok) {
-        answerText.textContent = result.error;
-        return;
+        const result = await response.json();
+
+        if (!response.ok) {
+            answerText.textContent =
+                result.error || "Question failed.";
+            return;
+        }
+
+        remaining = result.remaining;
+
+        const question = getQuestionText(attribute, value);
+
+        questionHistory.push({
+            question: question,
+            answer: result.answer
+        });
+
+        answerText.textContent = question;
+        showAnswer(result.answer);
+        renderHistory();
+        updateStats(result.questions_asked);
+        renderBoard();
+    } catch (error) {
+        answerText.textContent =
+            "Could not reach the game server.";
+    } finally {
+        askButton.disabled = gameOver;
     }
-
-    answerText.textContent =
-        result.answer ? "Answer: YES" : "Answer: NO";
-
-    remaining = result.remaining;
-
-    document.getElementById("question-count").textContent =
-        result.questions_asked;
-
-    renderBoard();
 }
 
 async function guessCharacter(id, name) {
@@ -147,40 +250,75 @@ async function guessCharacter(id, name) {
         return;
     }
 
-    const response = await fetch("/api/guess", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({character_id: id})
-    });
+    try {
+        const response = await fetch("/api/guess", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({character_id: id})
+        });
 
-    const result = await response.json();
+        const result = await response.json();
 
-    if (!response.ok) {
-        answerText.textContent = result.error;
-        return;
+        if (!response.ok) {
+            answerText.textContent =
+                result.error || "Guess failed.";
+            return;
+        }
+
+        gameOver = true;
+        askButton.disabled = true;
+        attributeSelect.disabled = true;
+        valueSelect.disabled = true;
+
+        renderBoard();
+
+        document.getElementById("result-icon").textContent =
+            result.correct ? "🏆" : "🎭";
+
+        document.getElementById("result-title").textContent =
+            result.correct ? "You Win!" : "Not Quite!";
+
+        document.getElementById("result-message").textContent =
+            result.correct
+                ? `You found ${result.secret_name} after ` +
+                  `${result.questions_asked} questions!`
+                : `You guessed ${name}, but the secret ` +
+                  `character was ${result.secret_name}.`;
+
+        document.getElementById("result-modal")
+            .classList.remove("hidden");
+
+        document.getElementById("play-again-button").focus();
+    } catch (error) {
+        answerText.textContent =
+            "Could not submit your guess.";
     }
-
-    gameOver = true;
-    askButton.disabled = true;
-
-    answerText.textContent = result.correct
-        ? `You win! The character was ${result.secret_name}!`
-        : `Incorrect! The character was ${result.secret_name}.`;
-
-    renderBoard();
 }
 
 async function restartGame() {
-    const response = await fetch("/api/restart", {
-        method: "POST"
-    });
+    try {
+        const response = await fetch("/api/restart", {
+            method: "POST"
+        });
 
-    if (!response.ok) {
-        answerText.textContent = "Could not restart game.";
-        return;
+        if (!response.ok) {
+            throw new Error("Restart failed.");
+        }
+
+        questionHistory = [];
+        showAnswer(null);
+        renderHistory();
+
+        answerText.textContent = "Ask a question to begin!";
+
+        document.getElementById("result-modal")
+            .classList.add("hidden");
+
+        await loadGame();
+    } catch (error) {
+        answerText.textContent =
+            "Could not restart the game.";
     }
-
-    await loadGame();
 }
 
 attributeSelect.addEventListener("change", updateOptions);
@@ -189,5 +327,13 @@ askButton.addEventListener("click", askQuestion);
 document.getElementById("restart-button")
     .addEventListener("click", restartGame);
 
+document.getElementById("play-again-button")
+    .addEventListener("click", restartGame);
+
 updateOptions();
-loadGame();
+renderHistory();
+
+loadGame().catch(() => {
+    answerText.textContent =
+        "Unable to load the game. Check the Flask server.";
+});
