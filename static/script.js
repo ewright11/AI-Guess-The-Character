@@ -87,7 +87,18 @@ function renderBoard() {
 
         const avatar = document.createElement("div");
         avatar.className = "avatar";
-        avatar.textContent = character.avatar;
+
+        const img = document.createElement("img");
+        img.src = `/static/${character.image}`;
+        img.alt = character.name;
+        img.className = "character-portrait";
+
+        img.onerror = () => {
+            img.remove();
+            avatar.textContent = "👤";
+        };
+
+        avatar.appendChild(img);
 
         const name = document.createElement("h3");
         name.textContent = character.name;

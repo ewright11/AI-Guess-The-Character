@@ -504,3 +504,29 @@ select:focus-visible {
         transition-duration: 0.01ms !important;
     }
 }
+
+/* CHARACTER PORTRAITS */
+
+.avatar {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    padding: 0;
+}
+
+.character-portrait {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 4px;
+}
+
+.character:hover:not(.eliminated) .character-portrait {
+    filter: brightness(1.07);
+}
+
+.character.eliminated .character-portrait {
+    filter: grayscale(100%);
+}
