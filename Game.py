@@ -20,10 +20,19 @@ class GuessWhoGame:
             return {"error": "The game is over."}
 
         allowed = {
+            "gender": ["male", "female"],
             "hair": ["black", "brown", "blonde", "red"],
+            "eye_color": ["brown", "blue", "green", "hazel"],
+            "clothing_color": [
+                "red", "blue", "green", "yellow",
+                "purple", "orange", "black", "white"
+            ],
+            "hair_length": ["short", "medium", "long"],
+            "face_shape": ["round", "oval", "square"],
             "glasses": [True, False],
             "hat": [True, False],
-            "beard": [True, False]
+            "beard": [True, False],
+            "earrings": [True, False]
         }
 
         if attribute not in allowed:
