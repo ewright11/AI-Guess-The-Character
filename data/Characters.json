@@ -3,7 +3,7 @@
     {
         "id": 1,
         "name": "Alex",
-        "image": "images/alex.png",
+        "image": "Images/Practice_characters/Alex.png",
         "gender": "male",
         "hair": "black",
         "eye_color": "brown",
@@ -18,7 +18,7 @@
     {
         "id": 2,
         "name": "Jordan",
-        "image": "images/jordan.png",
+        "image": "Images/Practice_characters/Jordan.png",
         "gender": "female",
         "hair": "brown",
         "eye_color": "green",
@@ -33,7 +33,7 @@
     {
         "id": 3,
         "name": "Sam",
-        "image": "images/sam.png",
+        "image": "Images/Practice_characters/Sam.png",
         "gender": "male",
         "hair": "red",
         "eye_color": "blue",
@@ -48,7 +48,7 @@
     {
         "id": 4,
         "name": "Taylor",
-        "image": "images/taylor.png",
+        "image": "Images/Practice_characters/Taylor.png",
         "gender": "female",
         "hair": "blonde",
         "eye_color": "blue",
@@ -63,7 +63,7 @@
     {
         "id": 5,
         "name": "Morgan",
-        "image": "images/morgan.png",
+        "image": "Images/Practice_characters/Morgan.png",
         "gender": "male",
         "hair": "black",
         "eye_color": "brown",
@@ -78,7 +78,7 @@
     {
         "id": 6,
         "name": "Casey",
-        "image": "images/casey.png",
+        "image": "Images/Practice_characters/Casey.png",
         "gender": "female",
         "hair": "red",
         "eye_color": "green",
@@ -93,7 +93,7 @@
     {
         "id": 7,
         "name": "Riley",
-        "image": "images/riley.png",
+        "image": "Images/Practice_characters/Riley.png",
         "gender": "male",
         "hair": "brown",
         "eye_color": "hazel",
@@ -108,7 +108,7 @@
     {
         "id": 8,
         "name": "Jamie",
-        "image": "images/jamie.png",
+        "image": "Images/Practice_characters/Jamie.png",
         "gender": "female",
         "hair": "blonde",
         "eye_color": "brown",
@@ -123,7 +123,7 @@
     {
         "id": 9,
         "name": "Drew",
-        "image": "images/drew.png",
+        "image": "Images/Practice_characters/Drew.png",
         "gender": "male",
         "hair": "black",
         "eye_color": "green",
@@ -138,7 +138,7 @@
     {
         "id": 10,
         "name": "Avery",
-        "image": "images/avery.png",
+        "image": "Images/Practice_characters/Avery.png",
         "gender": "female",
         "hair": "brown",
         "eye_color": "brown",
@@ -153,7 +153,7 @@
     {
         "id": 11,
         "name": "Blake",
-        "image": "images/blake.png",
+        "image": "Images/Practice_characters/Blake.png",
         "gender": "male",
         "hair": "blonde",
         "eye_color": "blue",
@@ -168,7 +168,7 @@
     {
         "id": 12,
         "name": "Quinn",
-        "image": "images/quinn.png",
+        "image": "Images/Practice_characters/Quinn.png",
         "gender": "female",
         "hair": "black",
         "eye_color": "hazel",
@@ -183,7 +183,7 @@
     {
         "id": 13,
         "name": "Cameron",
-        "image": "images/cameron.png",
+        "image": "Images/Practice_characters/Cameron.png",
         "gender": "male",
         "hair": "red",
         "eye_color": "green",
@@ -198,7 +198,7 @@
     {
         "id": 14,
         "name": "Parker",
-        "image": "images/parker.png",
+        "image": "Images/Practice_characters/Parker.png",
         "gender": "female",
         "hair": "brown",
         "eye_color": "blue",
@@ -213,7 +213,7 @@
     {
         "id": 15,
         "name": "Reese",
-        "image": "images/reese.png",
+        "image": "Images/Practice_characters/Reese.png",
         "gender": "male",
         "hair": "black",
         "eye_color": "brown",
@@ -228,7 +228,7 @@
     {
         "id": 16,
         "name": "Skyler",
-        "image": "images/skyler.png",
+        "image": "Images/Practice_characters/Skyler.png",
         "gender": "female",
         "hair": "red",
         "eye_color": "hazel",
@@ -243,7 +243,7 @@
     {
         "id": 17,
         "name": "Charlie",
-        "image": "images/charlie.png",
+        "image": "Images/Practice_characters/Charlie.png",
         "gender": "male",
         "hair": "blonde",
         "eye_color": "hazel",
@@ -258,7 +258,7 @@
     {
         "id": 18,
         "name": "Robin",
-        "image": "images/robin.png",
+        "image": "Images/Practice_characters/Robin.png",
         "gender": "female",
         "hair": "black",
         "eye_color": "brown",
@@ -273,7 +273,7 @@
     {
         "id": 19,
         "name": "Dakota",
-        "image": "images/dakota.png",
+        "image": "Images/Practice_characters/Dakota.png",
         "gender": "male",
         "hair": "brown",
         "eye_color": "blue",
@@ -288,7 +288,7 @@
     {
         "id": 20,
         "name": "Finley",
-        "image": "images/finley.png",
+        "image": "Images/Practice_characters/FSinley.png",
         "gender": "female",
         "hair": "red",
         "eye_color": "green",
