@@ -10,17 +10,35 @@ const valueSelect = document.getElementById("value");
 const answerText = document.getElementById("answer");
 const askButton = document.getElementById("ask-button");
 
-const options = {
-    glasses: [["true", "Yes"], ["false", "No"]],
-    hat: [["true", "Yes"], ["false", "No"]],
-    beard: [["true", "Yes"], ["false", "No"]],
-    hair: [
-        ["black", "Black"],
-        ["brown", "Brown"],
-        ["blonde", "Blonde"],
-        ["red", "Red"]
-    ]
+const attributeValues = {
+    gender: ["male", "female"],
+    hair: ["black", "brown", "blonde", "red"],
+    eye_color: ["brown", "blue", "green", "hazel"],
+    clothing_color: [
+        "red", "blue", "green", "yellow",
+        "purple", "orange", "black", "white"
+    ],
+    hair_length: ["short", "medium", "long"],
+    face_shape: ["round", "oval", "square"],
+    glasses: ["true", "false"],
+    hat: ["true", "false"],
+    beard: ["true", "false"],
+    earrings: ["true", "false"]
 };
+
+const options = Object.fromEntries(
+    Object.entries(attributeValues).map(
+        ([attribute, values]) => [
+            attribute,
+            values.map(value => [
+                value,
+                value === "true" ? "Yes" :
+                value === "false" ? "No" :
+                value.charAt(0).toUpperCase() + value.slice(1)
+            ])
+        ]
+    )
+);
 
 function updateOptions() {
     const attribute = attributeSelect.value;
@@ -147,25 +165,48 @@ function renderHistory() {
 }
 
 function getQuestionText(attribute, value) {
-    if (attribute === "hair") {
-        return `Does your character have ${value} hair?`;
-    }
+    switch (attribute) {
+        case "gender":
+            return `Is your character ${value}?`;
 
-    if (attribute === "glasses") {
-        return value
-            ? "Does your character wear glasses?"
-            : "Does your character not wear glasses?";
-    }
+        case "hair":
+            return `Does your character have ${value} hair?`;
 
-    if (attribute === "hat") {
-        return value
-            ? "Does your character wear a hat?"
-            : "Does your character not wear a hat?";
-    }
+        case "eye_color":
+            return `Does your character have ${value} eyes?`;
 
-    return value
-        ? "Does your character have a beard?"
-        : "Does your character not have a beard?";
+        case "clothing_color":
+            return `Is your character wearing ${value}?`;
+
+        case "hair_length":
+            return `Does your character have ${value} hair?`;
+
+        case "face_shape":
+            return `Does your character have a ${value} face?`;
+
+        case "glasses":
+            return value
+                ? "Does your character wear glasses?"
+                : "Does your character not wear glasses?";
+
+        case "hat":
+            return value
+                ? "Does your character wear a hat?"
+                : "Does your character not wear a hat?";
+
+        case "beard":
+            return value
+                ? "Does your character have a beard?"
+                : "Does your character not have a beard?";
+
+        case "earrings":
+            return value
+                ? "Does your character wear earrings?"
+                : "Does your character not wear earrings?";
+
+        default:
+            return "Unknown question";
+    }
 }
 
 async function loadGame() {
@@ -200,7 +241,11 @@ async function askQuestion() {
     const attribute = attributeSelect.value;
     let value = valueSelect.value;
 
-    if (attribute !== "hair") {
+    const booleanAttributes = [
+        "glasses", "hat", "beard", "earrings"
+    ];
+
+    if (booleanAttributes.includes(attribute)) {
         value = value === "true";
     }
 
