@@ -103,18 +103,8 @@ function renderBoard() {
         const name = document.createElement("h3");
         name.textContent = character.name;
 
-        const traits = document.createElement("div");
-        traits.className = "traits";
-
-        traits.textContent =
-            `Hair: ${character.hair} | ` +
-            `Glasses: ${character.glasses ? "Yes" : "No"} | ` +
-            `Hat: ${character.hat ? "Yes" : "No"} | ` +
-            `Beard: ${character.beard ? "Yes" : "No"}`;
-
         card.appendChild(avatar);
         card.appendChild(name);
-        card.appendChild(traits);
 
         const available = !gameOver &&
             remaining.includes(character.id);
