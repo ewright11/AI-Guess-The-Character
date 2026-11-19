@@ -1,8 +1,8 @@
-
 import json
 from pathlib import Path
 from flask import Flask, render_template, request, jsonify, session
 from game import GuessWhoGame
+from ai import interpret_question
 
 app = Flask(__name__)
 app.secret_key = "development-only-change-this-key"
