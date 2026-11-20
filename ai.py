@@ -100,7 +100,7 @@ def interpret_question(question):
         response = client.models.generate_content(
             model=os.getenv(
                 "GEMINI_MODEL",
-                "gemini-2.5-flash-lite"
+                "gemini-3.5-flash-lite"
             ),
             contents=question,
             config=types.GenerateContentConfig(
@@ -159,7 +159,7 @@ def interpret_question(question):
 
     except Exception as error:
         print("AI interpretation failed:", type(error).__name__)
-
+        print("Error details:", str(error))
         return {
             **invalid_question(
                 "The AI is temporarily unavailable. Please try again."
