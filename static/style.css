@@ -742,3 +742,43 @@ select:focus-visible {
     padding: 12px;
     margin-bottom: 8px;
 }
+
+/* Example question buttons */
+
+.example-section {
+    margin: 24px 0;
+}
+
+.example-heading {
+    color: #bac9dc;
+    font-size: 15px;
+    margin-bottom: 12px;
+}
+
+.example-questions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.example-question {
+    background: transparent;
+    border: 1px solid #50647d;
+    border-radius: 25px;
+
+    color: #e1e7ef;
+    padding: 8px 14px;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.example-question:hover {
+    background: #344e70;
+    border-color: #ffce46;
+    color: #ffce46;
+}

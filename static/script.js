@@ -314,6 +314,17 @@ document.getElementById("restart-button")
 document.getElementById("play-again-button")
     .addEventListener("click", restartGame);
 
+document.querySelectorAll(".example-question")
+    .forEach(button => {
+        button.addEventListener("click", () => {
+            if (gameOver) return;
+
+            questionInput.value = button.textContent.trim();
+            hideFeedback();
+            questionInput.focus();
+        });
+    });
+
 renderHistory();
 
 loadGame().catch(() => {
