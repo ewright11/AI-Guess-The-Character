@@ -33,12 +33,40 @@
         <div class="progress-track">
             <div id="progress-fill"></div>
         </div>
+        
+        <div class="board-controls">
+
+            <div class="elimination-control">
+
+                <div class="elimination-label">
+                    <strong>Auto-elimination</strong>
+
+                    <span id="elimination-status">
+                        Manual Mode
+                    </span>
+                </div>
+
+                <label class="toggle-switch">
+                    <input
+                        type="checkbox"
+                        id="auto-eliminate"
+                        aria-label="Automatic elimination"
+                    >
+                    <span class="toggle-slider"></span>
+                </label>
+
+            </div>
+
+            <button type="button" id="guess-mode-button">
+                Guess Character
+            </button>
+        </div>
 
         <div id="character-board"></div>
 
-        <p class="board-instructions">
-            Ask questions to eliminate characters.
-            Click a remaining character to make your final guess.
+        <p class="board-instructions" id="board-instructions">
+            Click a character to eliminate or restore them.
+            Select Guess Character to make your final guess.
         </p>
     </section>
 

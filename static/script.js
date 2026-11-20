@@ -1,8 +1,14 @@
 
 let characters = [];
 let remaining = [];
+let actualRemaining = [];
+
 let gameOver = false;
 let questionHistory = [];
+
+let autoEliminate = false;
+let guessMode = false;
+
 
 const board = document.getElementById("character-board");
 const answerText = document.getElementById("answer");
@@ -12,6 +18,11 @@ const questionInput = document.getElementById("question-input");
 const aiFeedback = document.getElementById("ai-feedback");
 const feedbackMessage = document.getElementById("feedback-message");
 const suggestionButton = document.getElementById("use-suggestion");
+
+const autoEliminateToggle = document.getElementById("auto-eliminate");
+const eliminationStatus = document.getElementById("elimination-status");
+const guessModeButton = document.getElementById("guess-mode-button");
+const boardInstructions = document.getElementById("board-instructions");
 
 const attributeValues = {
     gender: ["male", "female"],
@@ -51,6 +62,27 @@ function updateStats(questionCount) {
         `${percentage}%`;
 }
 
+function toggleCharacter(id) {
+    if (gameOver || autoEliminate || guessMode) {
+        return;
+    }
+
+    if (remaining.includes(id)) {
+
+        remaining = remaining.filter(
+            characterId => characterId !== id
+        );
+
+    } else {
+
+        remaining.push(id);
+
+    }
+
+    updateStats(questionHistory.length);
+    renderBoard();
+}
+
 function renderBoard() {
     board.innerHTML = "";
 
@@ -84,20 +116,40 @@ function renderBoard() {
         card.appendChild(avatar);
         card.appendChild(name);
 
-        const available = !gameOver &&
-            remaining.includes(character.id);
+        const isRemaining = remaining.includes(character.id);
 
-        card.disabled = !available;
+        card.disabled =
+            gameOver ||
+            (guessMode && !isRemaining) ||
+            (autoEliminate && !guessMode);
+
         card.setAttribute(
             "aria-label",
-            `Guess ${character.name}`
+            guessMode
+                ? `Guess ${character.name}`
+                : isRemaining
+                    ? `Eliminate ${character.name}`
+                    : `Restore ${character.name}`
         );
 
-        if (available) {
-            card.addEventListener("click", () => {
-                guessCharacter(character.id, character.name);
-            });
-        }
+        card.addEventListener("click", () => {
+            if (gameOver) return;
+
+            if (guessMode) {
+
+                if (isRemaining) {
+                    guessCharacter(
+                        character.id,
+                        character.name
+                    );
+                }
+
+            } else if (!autoEliminate) {
+
+                toggleCharacter(character.id);
+
+            }
+        });
 
         board.appendChild(card);
     });
@@ -203,13 +255,17 @@ async function loadGame() {
 
     const state = await stateResponse.json();
 
-    remaining = state.remaining;
+    actualRemaining = [...state.remaining];
+    remaining = [...actualRemaining];
+
     gameOver = state.game_over;
+    guessMode = false;
 
     askAIButton.disabled = gameOver;
     questionInput.disabled = gameOver;
 
     updateStats(state.questions_asked);
+    updateBoardControls();
     renderBoard();
 }
 
@@ -323,7 +379,11 @@ async function askAIQuestion() {
         }
 
         // Update remaining characters
-        remaining = result.remaining;
+        actualRemaining = [...result.remaining];
+
+        if (autoEliminate) {
+            remaining = [...actualRemaining];
+        }
 
         // Save the question and answer
         questionHistory.push({
@@ -380,6 +440,8 @@ async function guessCharacter(id, name) {
         }
 
         gameOver = true;
+        guessMode = false;
+        updateBoardControls();
         askAIButton.disabled = true;
         questionInput.disabled = true;
 
@@ -419,6 +481,7 @@ async function restartGame() {
         }
 
         questionHistory = [];
+        guessMode = false;
         showAnswer(null);
         renderHistory();
 
@@ -432,6 +495,70 @@ async function restartGame() {
         answerText.textContent =
             "Could not restart the game.";
     }
+}
+
+function updateBoardControls() {
+    autoEliminateToggle.checked = autoEliminate;
+    autoEliminateToggle.disabled = gameOver;
+
+    guessModeButton.disabled = gameOver;
+
+    eliminationStatus.textContent = autoEliminate
+        ? "Automatic Mode"
+        : "Manual Mode";
+
+    guessModeButton.classList.toggle(
+        "active",
+        guessMode
+    );
+
+    guessModeButton.textContent = guessMode
+        ? "Cancel Guess"
+        : "Guess Character";
+
+    if (guessMode) {
+
+        boardInstructions.textContent =
+            "Select a character to make your final guess.";
+
+    } else if (autoEliminate) {
+
+        boardInstructions.textContent =
+            "Characters are automatically eliminated.";
+
+    } else {
+
+        boardInstructions.textContent =
+            "Click characters to eliminate or restore them.";
+
+    }
+}
+
+function changeEliminationMode() {
+    if (gameOver) return;
+
+    autoEliminate = autoEliminateToggle.checked;
+
+    guessMode = false;
+
+    if (autoEliminate) {
+
+        remaining = [...actualRemaining];
+
+    }
+
+    updateBoardControls();
+    updateStats(questionHistory.length);
+    renderBoard();
+}
+
+function toggleGuessMode() {
+    if (gameOver) return;
+
+    guessMode = !guessMode;
+
+    updateBoardControls();
+    renderBoard();
 }
 
 document.getElementById("restart-button")
@@ -462,6 +589,16 @@ questionInput.addEventListener("keydown", (event) => {
         }
     }
 });
+
+autoEliminateToggle.addEventListener(
+    "change",
+    changeEliminationMode
+);
+
+guessModeButton.addEventListener(
+    "click",
+    toggleGuessMode
+);
 
 renderHistory();
 
