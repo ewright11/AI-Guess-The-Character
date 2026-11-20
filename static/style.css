@@ -196,7 +196,6 @@ select:focus-visible {
 .character.eliminated {
     transform: rotateX(-78deg);
     opacity: 0.35;
-    pointer-events: none;
 }
 
 .board-instructions {
@@ -901,4 +900,15 @@ select:focus-visible {
 #guess-mode-button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+/* Allow eliminated characters to be restored */
+
+.character.eliminated:not(:disabled) {
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.character.eliminated:not(:disabled):hover {
+    transform: translateY(-3px);
 }

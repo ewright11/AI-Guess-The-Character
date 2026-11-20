@@ -136,18 +136,12 @@ function renderBoard() {
             if (gameOver) return;
 
             if (guessMode) {
-
-                if (isRemaining) {
-                    guessCharacter(
-                        character.id,
-                        character.name
-                    );
+                if (remaining.includes(character.id)) {
+                    guessCharacter(character.id, character.name);
                 }
 
             } else if (!autoEliminate) {
-
                 toggleCharacter(character.id);
-
             }
         });
 
