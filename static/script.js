@@ -9,6 +9,10 @@ const attributeSelect = document.getElementById("attribute");
 const valueSelect = document.getElementById("value");
 const answerText = document.getElementById("answer");
 const askButton = document.getElementById("ask-button");
+const questionInput = document.getElementById("question-input");
+const aiFeedback = document.getElementById("ai-feedback");
+const feedbackMessage = document.getElementById("feedback-message");
+const suggestionButton = document.getElementById("use-suggestion");
 
 const attributeValues = {
     gender: ["male", "female"],
@@ -234,6 +238,24 @@ async function loadGame() {
 
     updateStats(state.questions_asked);
     renderBoard();
+}
+
+function showFeedback(message, suggestion = "") {
+    aiFeedback.hidden = false;
+    feedbackMessage.textContent = message;
+
+    suggestionButton.hidden = !suggestion;
+    suggestionButton.textContent = suggestion;
+
+    suggestionButton.onclick = () => {
+        questionInput.value = suggestion;
+        aiFeedback.hidden = true;
+        questionInput.focus();
+    };
+}
+
+function hideFeedback() {
+    aiFeedback.hidden = true;
 }
 
 async function askQuestion() {

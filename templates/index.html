@@ -49,23 +49,34 @@
             <span id="turn-label">Question 1</span>
         </div>
 
-        <div class="question-controls">
-            <select id="attribute">
-                <option value="gender">Gender</option>
-                <option value="hair">Hair Color</option>
-                <option value="eye_color">Eye Color</option>
-                <option value="clothing_color">Clothing Color</option>
-                <option value="hair_length">Hair Length</option>
-                <option value="face_shape">Face Shape</option>
-                <option value="glasses">Glasses</option>
-                <option value="hat">Hat</option>
-                <option value="beard">Beard</option>
-                <option value="earrings">Earrings</option>
-            </select>
+       <div class="question-input-section">
+            <label for="question-input">
+                Ask a Question
+            </label>
 
-            <select id="value"></select>
+            <textarea
+                id="question-input"
+                placeholder="Does your character have blue eyes?"
+                rows="3"
+                maxlength="300"
+            ></textarea>
 
-            <button id="ask-button">Ask Question</button>
+            <button id="ask-button">
+                Ask Question
+            </button>
+
+            <div id="ai-feedback" class="ai-feedback" hidden>
+
+                <div class="ai-feedback-title">
+                    AI Assistant
+                </div>
+
+                <p id="feedback-message"></p>
+
+                <button id="use-suggestion" hidden></button>
+
+            </div>
+
         </div>
 
         <!-- ANSWER DISPLAY -->
