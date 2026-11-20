@@ -108,6 +108,22 @@ def restart():
         "game_over": False
     })
 
+@app.route("/api/interpret", methods=["POST"])
+def interpret():
+    data = request.get_json(silent=True)
+
+    if not isinstance(data, dict):
+        return jsonify({
+            "valid": False,
+            "message": "Invalid request."
+        }), 400
+
+    question = data.get("question", "")
+
+    result = interpret_question(question)
+
+    return jsonify(result)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
