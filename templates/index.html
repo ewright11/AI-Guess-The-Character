@@ -49,9 +49,10 @@
             <span id="turn-label">Question 1</span>
         </div>
 
-       <div class="question-input-section">
+        <!-- QUESTION CONTROLS-->
+        <div class="question-input-section">
             <label for="question-input">
-                Ask a Question
+                Ask a yes or no question
             </label>
 
             <textarea
@@ -61,7 +62,7 @@
                 maxlength="300"
             ></textarea>
 
-            <button id="ask-button">
+            <button type="button" id="ask-ai-button">
                 Ask Question
             </button>
 
@@ -73,10 +74,13 @@
 
                 <p id="feedback-message"></p>
 
-                <button id="use-suggestion" hidden></button>
+                <button
+                    type="button"
+                    id="use-suggestion"
+                    hidden
+                ></button>
 
             </div>
-
         </div>
 
         <!-- ANSWER DISPLAY -->

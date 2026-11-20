@@ -5,10 +5,9 @@ let gameOver = false;
 let questionHistory = [];
 
 const board = document.getElementById("character-board");
-const attributeSelect = document.getElementById("attribute");
-const valueSelect = document.getElementById("value");
 const answerText = document.getElementById("answer");
-const askButton = document.getElementById("ask-button");
+const askAIButton = document.getElementById("ask-ai-button");
+
 const questionInput = document.getElementById("question-input");
 const aiFeedback = document.getElementById("ai-feedback");
 const feedbackMessage = document.getElementById("feedback-message");
@@ -30,31 +29,6 @@ const attributeValues = {
     earrings: ["true", "false"]
 };
 
-const options = Object.fromEntries(
-    Object.entries(attributeValues).map(
-        ([attribute, values]) => [
-            attribute,
-            values.map(value => [
-                value,
-                value === "true" ? "Yes" :
-                value === "false" ? "No" :
-                value.charAt(0).toUpperCase() + value.slice(1)
-            ])
-        ]
-    )
-);
-
-function updateOptions() {
-    const attribute = attributeSelect.value;
-    valueSelect.innerHTML = "";
-
-    options[attribute].forEach(([value, label]) => {
-        const option = document.createElement("option");
-        option.value = value;
-        option.textContent = label;
-        valueSelect.appendChild(option);
-    });
-}
 
 function updateStats(questionCount) {
     document.getElementById("question-count").textContent =
@@ -232,9 +206,8 @@ async function loadGame() {
     remaining = state.remaining;
     gameOver = state.game_over;
 
-    askButton.disabled = gameOver;
-    attributeSelect.disabled = gameOver;
-    valueSelect.disabled = gameOver;
+    askAIButton.disabled = gameOver;
+    questionInput.disabled = gameOver;
 
     updateStats(state.questions_asked);
     renderBoard();
@@ -256,59 +229,6 @@ function showFeedback(message, suggestion = "") {
 
 function hideFeedback() {
     aiFeedback.hidden = true;
-}
-
-async function askQuestion() {
-    if (gameOver) return;
-
-    const attribute = attributeSelect.value;
-    let value = valueSelect.value;
-
-    const booleanAttributes = [
-        "glasses", "hat", "beard", "earrings"
-    ];
-
-    if (booleanAttributes.includes(attribute)) {
-        value = value === "true";
-    }
-
-    askButton.disabled = true;
-
-    try {
-        const response = await fetch("/api/question", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({attribute, value})
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-            answerText.textContent =
-                result.error || "Question failed.";
-            return;
-        }
-
-        remaining = result.remaining;
-
-        const question = getQuestionText(attribute, value);
-
-        questionHistory.push({
-            question: question,
-            answer: result.answer
-        });
-
-        answerText.textContent = question;
-        showAnswer(result.answer);
-        renderHistory();
-        updateStats(result.questions_asked);
-        renderBoard();
-    } catch (error) {
-        answerText.textContent =
-            "Could not reach the game server.";
-    } finally {
-        askButton.disabled = gameOver;
-    }
 }
 
 async function guessCharacter(id, name) {
@@ -334,9 +254,8 @@ async function guessCharacter(id, name) {
         }
 
         gameOver = true;
-        askButton.disabled = true;
-        attributeSelect.disabled = true;
-        valueSelect.disabled = true;
+        askAIButton.disabled = true;
+        questionInput.disabled = true;
 
         renderBoard();
 
@@ -389,16 +308,12 @@ async function restartGame() {
     }
 }
 
-attributeSelect.addEventListener("change", updateOptions);
-askButton.addEventListener("click", askQuestion);
-
 document.getElementById("restart-button")
     .addEventListener("click", restartGame);
 
 document.getElementById("play-again-button")
     .addEventListener("click", restartGame);
 
-updateOptions();
 renderHistory();
 
 loadGame().catch(() => {
