@@ -231,6 +231,132 @@ function hideFeedback() {
     aiFeedback.hidden = true;
 }
 
+function interpretQuestion(question) {
+    const text = question.toLowerCase().trim();
+
+    const supportedQuestions = {
+        "does your character have blue eyes": {
+            attribute: "eye_color", value: "blue"
+        },
+        "does your character have brown eyes": {
+            attribute: "eye_color", value: "brown"
+        },
+        "does your character have green eyes": {
+            attribute: "eye_color", value: "green"
+        },
+        "does your character have black hair": {
+            attribute: "hair", value: "black"
+        },
+        "does your character have blonde hair": {
+            attribute: "hair", value: "blonde"
+        },
+        "does your character wear glasses": {
+            attribute: "glasses", value: true
+        },
+        "does he have spectacles": {
+            attribute: "glasses", value: true
+        },
+        "does your character wear a hat": {
+            attribute: "hat", value: true
+        },
+        "does your character have a beard": {
+            attribute: "beard", value: true
+        },
+        "is your character male": {
+            attribute: "gender", value: "male"
+        },
+        "is your character female": {
+            attribute: "gender", value: "female"
+        }
+    };
+
+    const normalized = text.replace(/\?$/, "").trim();
+
+    return supportedQuestions[normalized] || null;
+}
+
+async function askAIQuestion() {
+    if (gameOver || askAIButton.disabled) return;
+
+    const question = questionInput.value.trim();
+
+    hideFeedback();
+
+    if (!question) {
+        showFeedback("Please enter a question.");
+        return;
+    }
+
+    const interpreted = interpretQuestion(question);
+
+    if (!interpreted) {
+        showFeedback(
+            "Try asking about a specific character attribute.",
+            "Does your character wear glasses?"
+        );
+        return;
+    }
+
+    askAIButton.disabled = true;
+    questionInput.disabled = true;
+    askAIButton.textContent = "Thinking...";
+
+    try {
+        const response = await fetch("/api/question", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                attribute: interpreted.attribute,
+                value: interpreted.value
+            })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            showFeedback(
+                result.error || "Question failed."
+            );
+            return;
+        }
+
+        // Update remaining characters
+        remaining = result.remaining;
+
+        // Save the question and answer
+        questionHistory.push({
+            question: question,
+            answer: result.answer
+        });
+
+        // Display the answer
+        answerText.textContent = question;
+        showAnswer(result.answer);
+
+        // Update the interface
+        renderHistory();
+        updateStats(result.questions_asked);
+        renderBoard();
+
+        // Clear the text box
+        questionInput.value = "";
+
+    } catch (error) {
+        console.error(error);
+
+        showFeedback(
+            "Could not reach the game server."
+        );
+
+    } finally {
+        askAIButton.disabled = gameOver;
+        questionInput.disabled = gameOver;
+        askAIButton.textContent = "Ask Question";
+    }
+}
+
 async function guessCharacter(id, name) {
     if (gameOver) return;
 
@@ -324,6 +450,18 @@ document.querySelectorAll(".example-question")
             questionInput.focus();
         });
     });
+
+askAIButton.addEventListener("click", askAIQuestion);
+
+questionInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+
+        if (!askAIButton.disabled) {
+            askAIQuestion();
+        }
+    }
+});
 
 renderHistory();
 
